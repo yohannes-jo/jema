@@ -1,0 +1,8 @@
+# database files
+db.sqlite3
+
+# static files 
+static/
+
+# local media files
+media/
