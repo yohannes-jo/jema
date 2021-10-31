@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load thumbnail %}
+
+{% block title %}Recommended{% endblock %}
+
+{% block body %}
+{% for profile in profiles %}
+<h2>{{ profile.name }}</h2>
+{% thumbnail profile.image '300x300' crop='center' as img %}
+<img src='{{ img.url }}' width="{{ img.width }}" height="{{ img.height }}">
+{% endthumbnail %}
+<p>{{ profile.bio }}</p>
+{% endfor %}
+{% endblock %}
