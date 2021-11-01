@@ -30,12 +30,18 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['0.0.0.0']
 
+MEDIA_URL = '/media/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
 
 # Application definition
 
 INSTALLED_APPS = [
     'feed',
+    'follower',
     'sorl.thumbnail',
+    'profiles',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -58,10 +64,6 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'jema.urls'
 
 TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates/')
-
-MEDIA_URL = '/media/'
-
-MEDIA_ROOT = os.path.join(PROJECT_DIR, 'media/')
 
 TEMPLATES = [
     {
@@ -130,6 +132,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+
+STATICFILES_DIRS = [
+    os.path.join(PROJECT_DIR, 'frontend/')
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

@@ -3,12 +3,29 @@
 
 {% block title %}Recommended{% endblock %}
 
+
 {% block body %}
-{% for profile in profiles %}
-<h2>{{ profile.name }}</h2>
-{% thumbnail profile.image '300x300' crop='center' as img %}
-<img src='{{ img.url }}' width="{{ img.width }}" height="{{ img.height }}">
-{% endthumbnail %}
-<p>{{ profile.bio }}</p>
-{% endfor %}
+<div class="container">
+    {% for post in posts %}
+    <div class="post">
+        <div class="post-header">
+            {% thumbnail post.author.image '50x50' crop='center' as img %}
+            <img src="{{ img.url }}" alt="{{ img.username }}" class="icon">
+            {% endthumbnail %}
+            <p class="user"><a href="#"><strong>{{ post.author.username }}</strong></p></a>
+        </div>
+        {% thumbnail post.image '500x500' crop='center' as img %}
+        <img src="{{ img.url }}" alt="" class="thumb">
+        {% endthumbnail %}
+
+        <div class="post-actions">
+            <p><a href="#"><strong>{{ post.author.username }} </strong></a>{{ post.text }}</p>
+            <div class="like"><a href="#">like</a></div>
+            <div class="comment"><a href="#">comment</a></div>
+            <div class="share"><a href="#">share</a></div>
+            <div class="save right"><a href="#">save</a></div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
 {% endblock %}
