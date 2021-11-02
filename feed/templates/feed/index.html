@@ -1,4 +1,15 @@
 {% extends 'base.html' %}
+{% load thumbnail %}
 
 {% block content %}
+
+{% for post in posts %}
+    <div class="post-image">
+        {% thumbnail post.image '500x500' crop='center' as img %}
+        <img src="{{ img.url }}" alt="{{ post.author.username }}">
+        {% endthumbnail %}
+    </div>
+    <div class="post-caption">{{ post.caption }}</div>
+{% endfor %}
+
 {% endblock content %}
