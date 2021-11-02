@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Finalize Registration{% endblock title %}
+
+{% block content %}
+
+<form action="{% url 'profiles:new_profile' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <button type="submit">Make Profile</button>
+    <input type="hidden" name="next">
+</form>
+
+{% endblock content %}

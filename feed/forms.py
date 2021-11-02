@@ -2,9 +2,9 @@ from django import forms
 
 from sorl.thumbnail import ImageField
 
-from . import models
+from .models import Post 
 
 class PostForm(forms.ModelForm):
     class Meta:
-        model = models.Post
+        model = Post
         fields = ['image', 'caption']

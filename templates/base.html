@@ -10,17 +10,20 @@
     <!-- Top navigation -->
     <div class="nav">
         <a href="{% url 'feed:index' %}">JEMA</a> - 
-        {% if user.is_authenticated %}
+        {% if request.user.is_authenticated %}
         <input type="text" width="80"> - 
-        <a href="#">HOME</a> - 
+        <a href="{% url 'feed:index' %}">HOME</a> - 
+        {# TODO: add links to all the main templates #}
         <a href="#">EXPLORE</a> - 
         <a href="#">NOTIFICATIONS</a> - 
         <a href="#">MESSAGES</a> - 
-        <a href="#">PROFILE</a> - 
+        {# TODO: add a mini icon #}
+        <a href="">PROFILE</a> - 
         <a href="{% url 'feed:add_post' %}">ADD POST</a> - 
         <a href="{% url 'profiles:logout' %}">LOG OUT</a>
         {% else %}
         <a href="{% url 'profiles:login' %}">LOG IN</a> - 
+        <a href="{% url 'profiles:register' %}">REGISTER</a>
         {% endif %}
     </div>
     <!-- End Top navigation -->
