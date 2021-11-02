@@ -19,8 +19,10 @@ from django.urls import path, include
 
 from .settings import MEDIA_ROOT, MEDIA_URL
 from feed import urls as feed_urls
+from profiles import urls as profiles_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(feed_urls)),
+    path('profiles/', include(profiles_urls)),
 ] + static(MEDIA_URL, document_root=MEDIA_ROOT)

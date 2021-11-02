@@ -33,6 +33,8 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     # My apps
     'feed',
+    'followers',
+    'profiles',
     'sorl.thumbnail',
 
     #Default apps

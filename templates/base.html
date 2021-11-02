@@ -10,12 +10,18 @@
     <!-- Top navigation -->
     <div class="nav">
         <a href="{% url 'feed:index' %}">JEMA</a> - 
+        {% if user.is_authenticated %}
         <input type="text" width="80"> - 
         <a href="#">HOME</a> - 
         <a href="#">EXPLORE</a> - 
         <a href="#">NOTIFICATIONS</a> - 
         <a href="#">MESSAGES</a> - 
-        <a href="#">PROFILE</a>
+        <a href="#">PROFILE</a> - 
+        <a href="{% url 'feed:add_post' %}">ADD POST</a> - 
+        <a href="{% url 'profiles:logout' %}">LOG OUT</a>
+        {% else %}
+        <a href="{% url 'profiles:login' %}">LOG IN</a> - 
+        {% endif %}
     </div>
     <!-- End Top navigation -->
     {% block content %}
