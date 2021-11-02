@@ -1,7 +1,5 @@
 from django.contrib import admin
-from .models import Post
 
-class PostAdmin(admin.ModelAdmin):
-    pass
+from . import models
 
-admin.site.register(Post, PostAdmin)
+admin.site.register(models.Post)
