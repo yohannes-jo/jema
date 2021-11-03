@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 
 from .models import Post
@@ -5,11 +6,19 @@ from .forms import PostForm
 
 def index(request):
     """Displays the homepage of the user.""" 
-    posts = Post.objects.order_by('-date_added')
+    posts = Post.objects.order_by('-date_added').filter(author=request.user) # TODO: add followed people too
     context = {'posts': posts}
 
     return render(request, 'feed/index.html', context)
 
+def explore(request):
+    """Displays all posts."""
+    posts = Post.objects.order_by('-date_added')
+    context = {'posts': posts}
+
+    return render(request, 'feed/explore.html', context)
+
+@login_required
 def add_post(request):
     """Add a new post to the feed."""
     if request.method != 'POST':

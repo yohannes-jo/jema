@@ -76,3 +76,6 @@ celerybeat.pid
 
 # Environments
 .venv
+
+# TODO list
+TODO.txt

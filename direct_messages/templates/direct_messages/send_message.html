@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}Send a message{% endblock title %}
+
+{% block content %}
+
+<form action="{% url 'direct_messages:send_message' user.username %}" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <button type="submit">Send Message</button>
+</form>
+
+{% endblock content %}

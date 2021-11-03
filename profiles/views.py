@@ -1,7 +1,9 @@
 from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import redirect, render
 
+from .models import Profile
 from .forms import ProfileRegistrationForm
 
 def register(request):
@@ -23,7 +25,8 @@ def register(request):
 
     return render(request, 'registration/register.html', context)
 
-def profileRegistration(request):
+@login_required
+def profile_registration(request):
     """Register a new profile based on given user."""
     if request.method != 'POST':
         # if the user isn't submitting a form, give them a blank one
@@ -45,3 +48,16 @@ def profileRegistration(request):
 
     return render(request, 'profiles/new_profile.html', context)
 
+@login_required
+def my_profile(request, username):
+    """Return the information of the currently logged-in user."""
+    current_profile = Profile.objects.get(user=request.user)
+
+    return render(request, 'profiles/my_profile.html', {'profile': current_profile})
+
+@login_required
+def edit_profile(request, username):
+    """Edit the information of the currently logged-in user."""
+    
+    return render(request, 'profiles/edit_profile.html', {})
+            

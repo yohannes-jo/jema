@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ user.username }}'s inbox{% endblock title %}
+
+{% block content %}
+
+{% for message in messages %}
+
+<div>
+    <p>{{ message.sender }}: {{ message.text }}</p>
+</div>
+
+{% endfor %}
+
+<p><a href="{% url 'direct_messages:send_message' user.username %}">SEND A MESSAGE</a></p>
+
+{% endblock content %}

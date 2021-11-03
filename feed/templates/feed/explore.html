@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% load thumbnail %}
+
+{% block title %}Explore{% endblock title %}
+
+{% block content %}
+
+{% for post in posts %}
+
+<div>
+    {% thumbnail post.image '200x200' crop='center' as img %}
+    <img src="{{ img.url }}" alt="{{ post.caption }}">
+    {% endthumbnail %}
+</div>
+
+{% endfor %}
+
+{% endblock content %}

@@ -1,3 +1,5 @@
+{% load static %}
+{% load thumbnail %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,25 +7,29 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Feed{% endblock title %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
     <!-- Top navigation -->
     <div class="nav">
-        <a href="{% url 'feed:index' %}">JEMA</a> - 
-        {% if request.user.is_authenticated %}
-        <input type="text" width="80"> - 
-        <a href="{% url 'feed:index' %}">HOME</a> - 
-        {# TODO: add links to all the main templates #}
-        <a href="#">EXPLORE</a> - 
+        <a href="{% url 'feed:index' %}">JEMA</a> -
+
+        {% if user.is_authenticated %}
+
+        <a href="{% url 'feed:index' %}">HOME</a> -
+        <a href="{% url 'feed:explore' %}">EXPLORE</a> - 
         <a href="#">NOTIFICATIONS</a> - 
-        <a href="#">MESSAGES</a> - 
-        {# TODO: add a mini icon #}
-        <a href="">PROFILE</a> - 
+        <a href="{% url 'direct_messages:inbox' user.username %}">MESSAGES</a> - 
+        <a href="{% url 'profiles:my_profile' user.username %}">PROFILE</a> - 
         <a href="{% url 'feed:add_post' %}">ADD POST</a> - 
+        <a href="{% url 'profiles:edit_profile' user.username %}">EDIT PROFILE</a> - 
         <a href="{% url 'profiles:logout' %}">LOG OUT</a>
+
         {% else %}
+
         <a href="{% url 'profiles:login' %}">LOG IN</a> - 
         <a href="{% url 'profiles:register' %}">REGISTER</a>
+
         {% endif %}
     </div>
     <!-- End Top navigation -->
