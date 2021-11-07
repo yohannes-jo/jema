@@ -9,9 +9,11 @@
 {% for post in posts %}
 
 <div>
-    {% thumbnail post.image '200x200' crop='center' as img %}
-    <img src="{{ img.url }}" alt="{{ post.caption }}">
-    {% endthumbnail %}
+    <a href="{% url 'feed:post' post.id %}">
+        {% thumbnail post.image '200x200' crop='center' as img %}
+        <img src="{{ img.url }}" alt="{{ post.caption }}">
+        {% endthumbnail %}
+    </a>
 </div>
 
 {% endfor %}

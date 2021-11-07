@@ -21,10 +21,12 @@ from .settings import MEDIA_ROOT, MEDIA_URL
 from feed import urls as feed_urls
 from profiles import urls as profiles_urls
 from direct_messages import urls as direct_messages_urls
+from notifications import urls as notifications_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(feed_urls)),
     path('profiles/', include(profiles_urls)),
     path('<str:username>/inbox/', include(direct_messages_urls)),
+    path('notifications/', include(notifications_urls)),
 ] + static(MEDIA_URL, document_root=MEDIA_ROOT)

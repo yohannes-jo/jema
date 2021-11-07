@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% load thumbnail %}
+
+{% block title %}{{ post.author.username }}'s post{% endblock title %}
+
+{% block content %}
+
+<div class="post-detail">
+    <div class="post">
+        <p>{{ post.author.user.username }}</p>
+        {% thumbnail post.image '500x500' crop='center' as img %}
+        <img src="{{ img.url }}" alt="{{ post.author.user.username }}">
+        {% endthumbnail %}
+    </div>
+    <div class="comments">
+        {% for comment in comments %}
+        <p>{{ comment.by.user.username }} - {{ comment.text }}</p>
+        {% endfor %}
+
+        <hr>
+
+        <form action="{% url 'feed:post' post.id %}" method="post">
+            {{ form.as_p }}
+            {% csrf_token %}
+
+            <button type="submit" class="btn-submit">Comment</button>
+        </form>
+    </div>
+</div>
+
+{% endblock content %}
