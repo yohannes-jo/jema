@@ -18,7 +18,7 @@
 
         <a href="{% url 'feed:index' %}">HOME</a> -
         <a href="{% url 'feed:explore' %}">EXPLORE</a> - 
-        <a href="#">NOTIFICATIONS</a> - 
+        <a href="{% url 'feed:notification' user.username %}">NOTIFICATIONS</a> - 
         <a href="{% url 'direct_messages:inbox' user.username %}">MESSAGES</a> - 
         <a href="{% url 'profiles:my_profile' user.username %}">PROFILE</a> - 
         <a href="{% url 'feed:add_post' %}">ADD POST</a> - 
