@@ -11,7 +11,9 @@
     </div>
     <div class="post-caption">{{ post.caption }}</div>
     <div>
-        <a href="#">LIKE</a> - <a href="{% url 'feed:post' post.id %}">COMMENT</a> - <a href="#">SHARE</a>
+        <a href="{% url 'feed:like' post.id %}" class="js-toggle-heart"><i class='bx bx-heart' ></i></a> - 
+        <a href="{% url 'feed:post' post.id %}">COMMENT</a> - 
+        <a href="{% url 'feed:share' post.id %}">SHARE</a>
     </div>
 {% endfor %}
 

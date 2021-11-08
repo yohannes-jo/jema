@@ -31,7 +31,10 @@ class Like(models.Model):
     )
 
     def __str__(self):
-        return f"{self.by.user.username} has liked a post made by {self.post.author.user.username}."
+        return f"{self.by.user.username} has liked a post made by {self.post.author.username}."
+
+    class Meta:
+        unique_together = ('by', 'post')
 
 class Comment(models.Model):
     date_added = models.DateTimeField(auto_now=True)
@@ -75,4 +78,4 @@ class Share(models.Model):
     )
 
     def __str__(self):
-        return f"From {self.by.user.username} has shared a post to {self.to.user.username}."
+        return f"{self.by.user.username} has shared a post to {self.to.user.username}."

@@ -1,8 +1,8 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 
-from .models import Comment, Post
-from .forms import CommentForm, PostForm
+from .models import Comment, Post, Like
+from .forms import CommentForm, PostForm, ShareForm
 
 from followers.models import Follower
 from profiles.models import Profile
@@ -97,5 +97,59 @@ def post(request, post_id):
 
     return render(request, 'feed/post.html', context)
 
+@login_required
+def like(request, post_id):
+    """Create a like to a given post."""
 
+    like, created = Like.objects.get_or_create(
+        by=Profile.objects.get(user=request.user),
+        post=Post.objects.get(id=post_id),
+    )
     
+    if created:
+        like.save()
+
+        # send a notification to user whose post was liked
+        liked_person = like.post.author
+
+        notification = Notification.objects.create(
+            notified_to = Profile.objects.get(user=liked_person),
+            notifier = Profile.objects.get(user=request.user),
+        )
+        notification.caption = f"Hey! {notification.notifier.user.username} just liked your post: {like.post.caption}."
+
+        notification.save()
+    
+    return redirect('feed:index')
+
+def share(request, post_id):
+    """Share a post to someone you follow."""
+
+    post = Post.objects.get(id=post_id)
+
+    if request.method != 'POST':
+        form = ShareForm()
+    else:
+        form = ShareForm(request.POST, request.FILES)
+        if form.is_valid():
+            share = form.save(commit=False)
+            share.by = Profile.objects.get(user=request.user)
+            share.post = post
+            share.save()
+
+            # send a notification to the user who recieved the share instance
+            shared_person = share.post.author
+
+            notification = Notification.objects.create(
+                notified_to = Profile.objects.get(user=shared_person),
+                notifier = Profile.objects.get(user=request.user),
+            )
+            notification.caption = f"Hey! {notification.notifier.user.username} just shared a post made by"
+            notification.caption += f" {share.post.author.username}: "
+            notification.caption += f"{share.post.caption}"
+
+            notification.save() 
+
+            return redirect('feed:index')
+
+    return render(request, 'feed/share.html', {'form': form, 'post': post})

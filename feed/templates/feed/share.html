@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}Share a post{% endblock title %}
+
+{% block content %}
+
+<form action="{% url 'feed:share' post.id %}" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <button type="submit">Share</button>
+</form>
+
+{% endblock content %}
