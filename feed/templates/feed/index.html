@@ -4,6 +4,9 @@
 {% block content %}
 
 {% for post in posts %}
+    <div class="post-author">
+        <a href="{% url 'profiles:detail' post.author.username %}">{{ post.author.username }}</a>
+    </div>
     <div class="post-image">
         {% thumbnail post.image '500x500' crop='center' as img %}
         <img src="{{ img.url }}" alt="{{ post.author.username }}">

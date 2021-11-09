@@ -21,7 +21,7 @@
             <a href="{% url 'feed:explore' %}"><i class='bx bx-compass' ></i></a> - 
             <a href="{% url 'notifications:index' %}"><i class='bx bx-notification' ></i></a> - 
             <a href="{% url 'direct_messages:inbox' user.username %}"><i class='bx bx-message-rounded-detail' ></i></a> - 
-            <a href="{% url 'profiles:my_profile' user.username %}">PROFILE</a> - 
+            <a href="{% url 'profiles:detail' user.username %}">PROFILE</a> - 
             <a href="{% url 'feed:add_post' %}"><i class='bx bx-image-add' ></i></a> - 
             <a href="{% url 'profiles:edit_profile' user.username %}">EDIT PROFILE</a> - 
             <a href="{% url 'profiles:logout' %}"><i class='bx bx-log-out' ></i></a>

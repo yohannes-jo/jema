@@ -8,7 +8,7 @@
 
 <div class="post-detail">
     <div class="post">
-        <p>{{ post.author.user.username }}</p>
+        <a href="{% url 'profiles:detail' post.author.username %}"><p>{{ post.author.username }}</p></a>
         {% thumbnail post.image '500x500' crop='center' as img %}
         <img src="{{ img.url }}" alt="{{ post.author.user.username }}">
         {% endthumbnail %}

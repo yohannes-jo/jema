@@ -1,10 +1,19 @@
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
+from django.http.response import HttpResponseBadRequest, JsonResponse
 from django.shortcuts import redirect, render
+from django.views.generic import View
+
+from notifications.models import Notification
 
 from .models import Profile
 from .forms import ProfileRegistrationForm
+
+from feed.models import Post
+from followers.models import Follower
 
 def register(request):
     """Register a new user."""
@@ -49,11 +58,16 @@ def profile_registration(request):
     return render(request, 'profiles/new_profile.html', context)
 
 @login_required
-def my_profile(request, username):
+def detail(request, username):
     """Return the information of the currently logged-in user."""
-    current_profile = Profile.objects.get(user=request.user)
+    current_profile = Profile.objects.get(user=User.objects.get(username=username))
+    post_count = Post.objects.filter(author=User.objects.get(username=username)).count()
+    follower_count = Follower.objects.filter(following=User.objects.get(username=username)).count()
+    you_follow = Follower.objects.filter(follower=request.user, following=current_profile.user).exists()
 
-    return render(request, 'profiles/my_profile.html', {'profile': current_profile})
+    context = {'profile': current_profile, 'post_count': post_count, 'follower_count': follower_count, 'you_follow': you_follow}
+
+    return render(request, 'profiles/detail.html', context)
 
 @login_required
 def edit_profile(request, username):
@@ -61,3 +75,46 @@ def edit_profile(request, username):
     
     return render(request, 'profiles/edit_profile.html', {})
             
+@login_required
+def follow(request, username):
+    """Follow a given user."""
+    data = request.POST.dict()
+
+    if 'action' not in data or 'username' not in data:
+        return HttpResponseBadRequest('Missing data')
+
+    other_user = User.objects.get(username=data['username'])
+    
+    if data['action'] == 'follow':
+        follow, created= Follower.objects.get_or_create(
+            follower = request.user,
+            following = other_user,
+        )
+        follow.save()
+        
+        followed_person = follow.following
+
+        notification = Notification.objects.create(
+            notified_to = Profile.objects.get(user=followed_person),
+            notifier = Profile.objects.get(user=request.user),
+        )
+        notification.caption = f"Hey! {notification.notifier.user.username} just started following you."
+
+        notification.save()
+
+    else:
+        try:
+            follower = Follower.objects.get(
+                follower=request.user,
+                following=other_user,
+            )
+        except Follower.DoesNotExist:
+            follower = None
+
+        if follower:
+            follower.delete()
+        
+    return JsonResponse({
+        'success': True,
+        'wording': 'Unfollow' if data['action'] == 'follow' else 'Follow'
+    })

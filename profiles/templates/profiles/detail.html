@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load thumbnail %}
+
+{% block title %}{{ user.username }}{% endblock title %}
+
+{% block content %}
+
+<p> {{ profile.name }} </p>
+<p> {{ profile.email }} </p>
+
+<div>
+    {% thumbnail profile.picture '200x200' crop='center' as img %}
+    <img src="{{ img.url }}" alt="{{ user.username }}">
+    {% endthumbnail %}
+</div>
+
+<div>
+    <p>{{ post_count }} POSTS - {{ follower_count }} FOLLOWERS</p>
+</div>
+
+{% if request.user != profile.user %}
+<div>
+    <button class="btn-follow" data-action="{% if you_follow %}un{% endif %}follow" data-username="{{ profile.user.username }}" data-url="{% url 'profiles:follow' profile.user.username %}" type="button">
+        <span class="follow-text">
+            {% if you_follow %}
+            Unfollow
+            {% else %}
+            Follow
+            {% endif %}
+        </span> 
+    </button>
+</div>
+{% endif %}
+
+{% endblock content %}
