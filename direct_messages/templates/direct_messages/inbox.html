@@ -4,18 +4,21 @@
 
 {% block content %}
 
+<p class="send-message"><a href="{% url 'direct_messages:send_message' user.username %}">SEND A MESSAGE</a></p>
+
 {% for message in messages %}
 
-<div>
+<div class="message">
     <p>
-        {% if message.sender.user == user %}You{% else %}{{ message.sender }}{% endif %}
-        to {% if message.reciever.user == user %}you{% else %}{{ message.reciever }}{% endif %}: 
+        <strong>{% if message.sender.user == user %}You{% else %}{{ message.sender }}{% endif %}</strong>
+        to <strong>{% if message.reciever.user == user %}you{% else %}{{ message.reciever }}{% endif %}</strong>: 
         {{ message.text }}
+    </p>
+    <p class="time">
+        {{ message.time }}
     </p>
 </div>
 
 {% endfor %}
-
-<p><a href="{% url 'direct_messages:send_message' user.username %}">SEND A MESSAGE</a></p>
 
 {% endblock content %}

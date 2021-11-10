@@ -4,20 +4,35 @@
 {% block content %}
 
 {% for post in posts %}
-    <div class="post-author">
-        <a href="{% url 'profiles:detail' post.author.username %}">{{ post.author.username }}</a>
+    <div class="post">
+        <div class="post-author">
+            <div class="profile-thumbnail">
+                {% thumbnail profile.picture '50x50' crop='center' as img %}
+                <img src="{{ img.url }}" alt="user.username" width="{{ img.width }}" height="{{ img.height }}">
+                {% endthumbnail %}
+            </div>
+            <div class="username">
+                <a href="{% url 'profiles:detail' post.author.username %}"><strong>{{ post.author.username }}</strong></a>
+            </div>
+        </div>
+        <div class="post-image">
+            {% thumbnail post.image '500x500' crop='center' as img %}
+            <img src="{{ img.url }}" alt="{{ post.author.username }}">
+            {% endthumbnail %}
+        </div>
+        <div class="post-caption">
+            <p><strong><a href="{% url 'profiles:detail' post.author.username %}">{{ post.author.username }}</a></strong> {{ post.caption }}</p>
+            <p class="time">{{ post.date_added|date:'M d, Y' }}</p>
+        </div>
+        <div class="post-footer">
+            <a href="{% url 'feed:like' post.id %}" class="js-toggle-heart"><i class='bx bx-heart' ></i></a>
+            <a href="{% url 'feed:post' post.id %}"><i class='bx bx-comment-detail'></i></a>
+            <a href="{% url 'feed:share' post.id %}"><i class='bx bx-share' ></i></a>
+
+        </div>
     </div>
-    <div class="post-image">
-        {% thumbnail post.image '500x500' crop='center' as img %}
-        <img src="{{ img.url }}" alt="{{ post.author.username }}">
-        {% endthumbnail %}
-    </div>
-    <div class="post-caption">{{ post.caption }}</div>
-    <div>
-        <a href="{% url 'feed:like' post.id %}" class="js-toggle-heart"><i class='bx bx-heart' ></i></a> - 
-        <a href="{% url 'feed:post' post.id %}">COMMENT</a> - 
-        <a href="{% url 'feed:share' post.id %}">SHARE</a>
-    </div>
+{% empty %}
+
 {% endfor %}
 
 {% endblock content %}

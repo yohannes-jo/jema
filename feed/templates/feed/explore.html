@@ -8,13 +8,13 @@
 
 {% for post in posts %}
 
-<div>
+<span class="exp-post">
     <a href="{% url 'feed:post' post.id %}">
         {% thumbnail post.image '200x200' crop='center' as img %}
         <img src="{{ img.url }}" alt="{{ post.caption }}">
         {% endthumbnail %}
     </a>
-</div>
+</span>
 
 {% endfor %}
 

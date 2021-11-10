@@ -1,18 +1,30 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 
-from .models import Comment, Post, Like
+from .models import Comment, Post, Like, Share
 from .forms import CommentForm, PostForm, ShareForm
 
 from followers.models import Follower
 from profiles.models import Profile
 from notifications.models import Notification
 
+@login_required
 def index(request):
     """Displays the homepage of the user.""" 
     if request.user.is_authenticated:
-        posts = Post.objects.order_by('-date_added').filter(author=request.user) # TODO: add followed people too
-        context = {'posts': posts}
+        profile = Profile.objects.get(user=request.user)
+
+        # Get all posts that the user and the people that they follow made        
+        following = list(
+            Follower.objects.filter(follower=request.user).values_list('following', flat=True)
+        )
+
+        following_posts = Post.objects.filter(author__in=following)
+        my_posts = Post.objects.filter(author=request.user)
+
+        posts = following_posts.union(my_posts).order_by('-date_added')
+        
+        context = {'posts': posts, 'profile': profile}
         return render(request, 'feed/index.html', context)
     
     return render(request, 'feed/index.html')
@@ -61,7 +73,10 @@ def add_post(request):
 def post(request, post_id):
     """Show a detailed view of a post, along with the ability to see and add comments."""
     post = Post.objects.get(id=post_id)
+    like_count = Like.objects.filter(post=post).count()
+    share_count = Share.objects.filter(post=post).count()
     comments = Comment.objects.filter(post=Post.objects.get(id=post_id))
+    profile = Profile.objects.get(user=post.author)
 
     if request.method != 'POST':
         # post an empty form
@@ -86,14 +101,14 @@ def post(request, post_id):
                 notification.notified_to = Profile.objects.get(user=relationship.follower)
                 notification.notifier = Profile.objects.get(user=request.user)
 
-                notification.caption = f"Hey! {notification.notifier.user.username} just commented on {notification.notified_to.user.username}'s post: {comment.text}."
+                notification.caption = f"{notification.notifier.user.username} just commented on {notification.notified_to.user.username}'s post: {comment.text}."
 
                 notification.save()
 
             return redirect('feed:post', post_id=post_id)
 
     # If it's an initial request or an invalid form, redirect to the same page
-    context = {'form': form, 'post': post, 'comments': comments}
+    context = {'form': form, 'post': post, 'comments': comments, 'profile': profile, 'like_count': like_count, 'share_count': share_count}
 
     return render(request, 'feed/post.html', context)
 
@@ -116,7 +131,7 @@ def like(request, post_id):
             notified_to = Profile.objects.get(user=liked_person),
             notifier = Profile.objects.get(user=request.user),
         )
-        notification.caption = f"Hey! {notification.notifier.user.username} just liked your post: {like.post.caption}."
+        notification.caption = f"{notification.notifier.user.username} just liked your post: {like.post.caption}."
 
         notification.save()
     
@@ -144,7 +159,7 @@ def share(request, post_id):
                 notified_to = Profile.objects.get(user=shared_person),
                 notifier = Profile.objects.get(user=request.user),
             )
-            notification.caption = f"Hey! {notification.notifier.user.username} just shared a post made by"
+            notification.caption = f"{notification.notifier.user.username} just shared a post made by"
             notification.caption += f" {share.post.author.username}: "
             notification.caption += f"{share.post.caption}"
 

@@ -1,4 +1,138 @@
-.nav {
-    padding: 5px;
-    margin: 5px;
+@import url('https://fonts.googleapis.com/css2?family=Mochiy+Pop+P+One&display=swap');
+
+body {
+    background-color: #c5c5c5;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+a {
+    color: black;
+    text-decoration: none;
+}
+
+@media (min-width: 992px) {
+    .nav {
+        border-bottom: 1px solid grey;
+        display: flex;
+        flex-wrap: nowrap;
+        margin-bottom: 15px;
+        padding: 5px 20% 10px 20%;
+    }
+
+    .nav > div {
+        flex-basis: 5%;
+        font-size: 30px;
+    }
+
+    #logo {
+        flex-basis: 50%;
+        font-family: 'Mochiy Pop P One', sans-serif;
+        font-size: 20px;
+    }
+
+    #content {
+        padding: 5px 20% 10px 20%;
+    }
+
+    .post {
+        border: 1px solid grey;
+        width: 500px;
+        margin-bottom: 20px;
+    }
+
+    .post-author {
+        display: flex;
+        padding: 5px;
+        align-items: center;
+    }
+
+    .post-author > div {
+        flex-basis: 15%;
+    }
+
+    .profile-thumbnail img {
+        border-radius: 50%;
+    }
+
+    .post-caption {
+        padding: 0 5px;
+        border-bottom: 1px solid grey;
+    }
+
+    .post-footer {
+        display: flex;
+        font-size: 25px;
+        padding: 5px;
+    }
+
+    .post-footer > a {
+        flex-basis: 7.5%;
+    }
+
+    .notification {
+        border: 1px solid grey;
+        margin-bottom: 10px;
+        padding: 5px;
+    }
+
+    .time {
+        color: grey;
+        font-size: small;
+    }
+
+    .send-message {
+        border: 5px solid black;
+        display: inline-block;
+        padding: 5px;
+    }
+
+    .message {
+        border: 1px solid grey;
+    }
+
+    .profile {
+        margin: 50px auto;
+        text-align: center;
+    }
+
+    .profile-picture img {
+        border-radius: 50%;
+    }
+
+    .profile-name {
+        font-size: 20px;
+    }
+    
+    .edit-profile {
+        border: 5px solid black;
+        display: inline-block;
+        padding: 5px;
+    }
+
+    .btn-follow {
+        text-decoration: none;
+        background-color: #c5c5c5;
+        border: 5px solid black;
+        display: inline-block;
+        padding: 5px;
+    }
+
+    .likes-shares {
+        display: inline-block;
+        flex-grow: 1;
+        font-size: small;
+        flex-direction: column-reverse;
+    }
+}
+
+@media (min-width: 768px) {
+
+}
+
+@media (min-width: 576px) {
+
 }

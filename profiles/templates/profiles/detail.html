@@ -4,32 +4,34 @@
 {% block title %}{{ user.username }}{% endblock title %}
 
 {% block content %}
-
-<p> {{ profile.name }} </p>
-<p> {{ profile.email }} </p>
-
-<div>
-    {% thumbnail profile.picture '200x200' crop='center' as img %}
-    <img src="{{ img.url }}" alt="{{ user.username }}">
-    {% endthumbnail %}
+<div class="profile">
+    <div class="profile-picture">
+        {% thumbnail profile.picture '200x200' crop='center' as img %}
+        <img src="{{ img.url }}" alt="{{ user.username }}">
+        {% endthumbnail %}
+    </div>
+    <p class="profile-name">{{ profile.name }}</p>
+    <p class="profile-username">@{{ profile.user.username }}</p>
+    <p class="profile-email"> {{ profile.email }} </p>
+    <div class="meta">
+        <p>{{ post_count }} POSTS - {{ follower_count }} FOLLOWERS</p>
+    </div>
+    <div class="profile-functions">
+        {% if request.user != profile.user %}
+        <div>
+            <button class="btn-follow" data-action="{% if you_follow %}un{% endif %}follow" data-username="{{ profile.user.username }}" data-url="{% url 'profiles:follow' profile.user.username %}" type="button">
+                <span class="follow-text">
+                    {% if you_follow %}
+                    UNFOLLOW
+                    {% else %}
+                    FOLLOW
+                    {% endif %}
+                </span> 
+            </button>
+        </div>
+        {% else %}
+        <div class="edit-profile"><a href="{% url 'profiles:edit_profile' user.username %}">EDIT PROFILE</a></div>
+        {% endif %}    
+    </div>
 </div>
-
-<div>
-    <p>{{ post_count }} POSTS - {{ follower_count }} FOLLOWERS</p>
-</div>
-
-{% if request.user != profile.user %}
-<div>
-    <button class="btn-follow" data-action="{% if you_follow %}un{% endif %}follow" data-username="{{ profile.user.username }}" data-url="{% url 'profiles:follow' profile.user.username %}" type="button">
-        <span class="follow-text">
-            {% if you_follow %}
-            Unfollow
-            {% else %}
-            Follow
-            {% endif %}
-        </span> 
-    </button>
-</div>
-{% endif %}
-
 {% endblock content %}

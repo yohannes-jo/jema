@@ -6,9 +6,9 @@
 
 {% for notification in notifications %}
 
-<div>
-    <p>{{ notification.notifier }}</p>
-    <p>{{ notification.caption }}</p>
+<div class="notification">
+    <p class="caption"><strong>{{ notification.notifier }}</strong>: {{ notification.caption }}</p>
+    <p class="time">{{ notification.time|date:'M d, Y' }}</p>
 </div>
 
 {% endfor %}
