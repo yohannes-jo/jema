@@ -31,11 +31,9 @@ $(document).on("click", ".btn-follow", function(e) {
             $(this).text(data.wording)
             if(action == "follow") {
                 // Change wording to unfollow
-                console.log("DEBUG", "unfollow")
                 $(this).attr("data-action", "unfollow")
             } else {
                 // The opposite
-                console.log("DEBUG", "follow")
                 $(this).attr("data-action", "follow")
             }
         },

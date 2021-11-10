@@ -9,6 +9,6 @@ urlpatterns = [
     path('register/', register, name='register'),
     path('new_profile/', profile_registration, name='new_profile'),
     path('<str:username>/', detail, name='detail'),
-    path('edit_profile/<str:username>/', edit_profile, name='edit_profile'),
+    path('<str:username>/edit_profile/', edit_profile, name='edit_profile'),
     path('<str:username>/follow/', follow, name='follow')
 ]

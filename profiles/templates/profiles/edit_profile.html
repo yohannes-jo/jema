@@ -4,6 +4,11 @@
 
 {% block content %}
 
+<form action="{% url 'profiles:edit_profile' user.username %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
 
+    <button type="submit">Edit Profile</button>
+</form>
 
 {% endblock content %}

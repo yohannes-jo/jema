@@ -1,19 +1,16 @@
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.http.response import HttpResponseBadRequest, JsonResponse
 from django.shortcuts import redirect, render
-from django.views.generic import View
-
-from notifications.models import Notification
 
 from .models import Profile
 from .forms import ProfileRegistrationForm
 
 from feed.models import Post
 from followers.models import Follower
+from notifications.models import Notification
 
 def register(request):
     """Register a new user."""
@@ -72,8 +69,20 @@ def detail(request, username):
 @login_required
 def edit_profile(request, username):
     """Edit the information of the currently logged-in user."""
-    
-    return render(request, 'profiles/edit_profile.html', {})
+    current_profile = Profile.objects.get(user=User.objects.get(username=username))
+
+    if request.method != 'POST':
+        # Initial request; pre-fill form with the current entry.
+        form = ProfileRegistrationForm(instance=current_profile)
+    else:
+        # POST data submitted; process data.
+        form = ProfileRegistrationForm(instance=current_profile, data=request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('profiles:detail', username=username)
+        
+    context = {'form': form}
+    return render(request, 'profiles/edit_profile.html', context)
             
 @login_required
 def follow(request, username):
@@ -86,13 +95,13 @@ def follow(request, username):
     other_user = User.objects.get(username=data['username'])
     
     if data['action'] == 'follow':
-        follow, created= Follower.objects.get_or_create(
+        relationship, created= Follower.objects.get_or_create(
             follower = request.user,
             following = other_user,
         )
-        follow.save()
+        relationship.save()
         
-        followed_person = follow.following
+        followed_person = relationship.following
 
         notification = Notification.objects.create(
             notified_to = Profile.objects.get(user=followed_person),
